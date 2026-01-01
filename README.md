@@ -161,11 +161,9 @@ This command will:
    - Configure:
      - **Name**: portfolio-site (or your preferred name)
      - **Environment**: Python 3
-     - **Build Command**: `./build.sh` or:
-       ```bash
-       pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate --no-input
-       ```
+     - **Build Command**: `./build.sh`
      - **Start Command**: `gunicorn config.wsgi:application`
+     - **Release Command**: `./release.sh` (Important: This runs migrations before deployment)
 
 3. **Set Environment Variables**
    
