@@ -147,15 +147,32 @@ This command will:
 ### Prerequisites
 
 - Render account
+- Supabase account (free tier works great)
 - GitHub repository connected to Render
 
 ### Steps
 
-1. **Create a PostgreSQL Database on Render**
-   - Go to Render Dashboard → New → PostgreSQL
-   - Note the `DATABASE_URL` (automatically provided as an environment variable)
+1. **Set up Supabase Database**
+   
+   **Create Supabase Project:**
+   - Go to https://supabase.com and sign up/login
+   - Click "New Project"
+   - Choose your organization
+   - Enter project name: `portfolio-site` (or your preference)
+   - Enter a database password (save this securely!)
+   - Select a region close to you
+   - Click "Create new project"
+   - Wait 2-3 minutes for the project to initialize
+   
+   **Get Connection String:**
+   - In your Supabase project, go to **Settings** → **Database**
+   - Scroll down to "Connection string"
+   - Under "URI", copy the connection string
+   - It will look like: `postgresql://postgres:[YOUR-PASSWORD]@db.xxxxx.supabase.co:5432/postgres`
+   - Replace `[YOUR-PASSWORD]` with the password you set when creating the project
+   - The final string should look like: `postgresql://postgres:yourpassword@db.xxxxx.supabase.co:5432/postgres`
 
-2. **Create a Web Service**
+2. **Create a Web Service on Render**
    - Go to Render Dashboard → New → Web Service
    - Connect your GitHub repository
    - Configure:
@@ -167,13 +184,15 @@ This command will:
 
 3. **Set Environment Variables**
    
-   In Render Dashboard → Environment:
-   - `SECRET_KEY`: Generate a secure key (e.g., use Django's `get_random_secret_key()`)
+   In Render Dashboard → Your Web Service → Environment:
+   - `SECRET_KEY`: Generate a secure key (you can use: `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`)
    - `DEBUG`: `False`
-   - `ALLOWED_HOSTS`: Your Render domain (e.g., `portfolio-site.onrender.com`)
-   - `DATABASE_URL`: Automatically provided by Render Postgres
-   - `GITHUB_TOKEN`: (Optional) Your GitHub personal access token
+   - `ALLOWED_HOSTS`: Your Render domain (e.g., `portfolio-site-k2mi.onrender.com`) - or leave blank to auto-detect
+   - `DATABASE_URL`: Paste the Supabase connection string from step 1
+   - `GITHUB_TOKEN`: (Optional) Your GitHub personal access token for higher API rate limits
    - `ADMIN_PATH`: (Optional) Custom admin path (e.g., `control-room-9f3b2/admin/`)
+   
+   **Important:** Make sure to set `DATABASE_URL` with your Supabase connection string!
 
 4. **Deploy**
    - Render will automatically deploy on push to your main branch
