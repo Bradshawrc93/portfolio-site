@@ -180,9 +180,9 @@ This command will:
    - Configure:
      - **Name**: portfolio-site (or your preferred name)
      - **Environment**: Python 3
-     - **Build Command**: `./build.sh`
+     - **Build Command**: `./build.sh` (migrations run automatically if DATABASE_URL is set)
      - **Start Command**: `gunicorn config.wsgi:application`
-     - **Release Command**: `./release.sh` (Important: This runs migrations before deployment)
+     - **Pre-deploy Command** (optional): `./release.sh` - if this field exists, use it for migrations
 
 3. **Set Environment Variables**
    
