@@ -167,10 +167,12 @@ This command will:
    **Get Connection String:**
    - In your Supabase project, go to **Settings** → **Database**
    - Scroll down to "Connection string"
+   - **IMPORTANT**: Select **"Connection pooling"** mode (NOT "Session" mode)
    - Under "URI", copy the connection string
-   - It will look like: `postgresql://postgres:[YOUR-PASSWORD]@db.xxxxx.supabase.co:5432/postgres`
+   - It will look like: `postgresql://postgres.lcdgncwgvcukbqzcxgfx:[YOUR-PASSWORD]@aws-0-us-east-1.pooler.supabase.com:6543/postgres`
+   - Or: `postgresql://postgres:[YOUR-PASSWORD]@db.xxxxx.supabase.co:6543/postgres`
+   - **Use port 6543** (connection pooling) - this is required for Render/serverless deployments
    - Replace `[YOUR-PASSWORD]` with the password you set when creating the project
-   - The final string should look like: `postgresql://postgres:yourpassword@db.xxxxx.supabase.co:5432/postgres`
 
 2. **Create a Web Service on Render**
    - Go to Render Dashboard → New → Web Service

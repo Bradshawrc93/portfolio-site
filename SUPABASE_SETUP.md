@@ -16,17 +16,18 @@ This guide will help you set up Supabase as your database for the Django portfol
 5. Click **"Create new project"**
 6. Wait 2-3 minutes for initialization
 
-### 2. Get Your Connection String
+### 2. Get Your Connection String (USE POOLING MODE!)
 
 1. In your Supabase project dashboard
 2. Go to **Settings** (gear icon in left sidebar)
 3. Click **Database**
 4. Scroll down to **"Connection string"** section
-5. Find the **"URI"** tab
-6. Copy the connection string
-   - It looks like: `postgresql://postgres:[YOUR-PASSWORD]@db.xxxxx.supabase.co:5432/postgres`
+5. **IMPORTANT**: Select **"Connection pooling"** mode (NOT "Session" or "Direct")
+6. Copy the connection string from the **"URI"** tab
+   - It should look like: `postgresql://postgres.lcdgncwgvcukbqzcxgfx:[YOUR-PASSWORD]@aws-0-us-east-1.pooler.supabase.com:6543/postgres`
+   - Or: `postgresql://postgres:[YOUR-PASSWORD]@db.lcdgncwgvcukbqzcxgfx.supabase.co:6543/postgres`
 7. **Replace `[YOUR-PASSWORD]`** with the actual password you set when creating the project
-   - Final format: `postgresql://postgres:your-actual-password@db.xxxxx.supabase.co:5432/postgres`
+   - **Use port 6543** (connection pooling) instead of 5432 for Render/serverless deployments
 
 ### 3. Configure in Render
 
