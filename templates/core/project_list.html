@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects | Cody Bradshaw{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="max-width: 800px; margin: 0 auto 3rem; text-align: center;">
+        <h1>Technical Projects</h1>
+        <p style="color: var(--gray); font-size: 1.125rem; margin-top: 1rem;">Building production-ready applications to deepen technical expertise and demonstrate execution capability across modern technology stacks.</p>
+    </div>
+
+    {% if has_heatmap_data %}
+    <div class="heatmap-container">
+        <h2 class="heatmap-title">GitHub Contributions {{ year }}</h2>
+        <div class="heatmap-grid">
+            {% for day, count in heatmap_data %}
+            <div class="heatmap-cell" 
+                 style="background-color: {% if count > 0 %}rgba(0, 255, 136, {% widthratio count max_count 1 %}){% else %}var(--navy-dark){% endif %};"
+                 title="{{ day|date:'M d, Y' }}: {{ count }} contributions">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="heatmap-legend">
+            <span>Less</span>
+            <div class="heatmap-legend-cells">
+                <div class="heatmap-legend-cell" style="background-color: var(--navy-dark);"></div>
+                <div class="heatmap-legend-cell" style="background-color: rgba(0, 255, 136, 0.25);"></div>
+                <div class="heatmap-legend-cell" style="background-color: rgba(0, 255, 136, 0.5);"></div>
+                <div class="heatmap-legend-cell" style="background-color: rgba(0, 255, 136, 0.75);"></div>
+                <div class="heatmap-legend-cell" style="background-color: var(--mint);"></div>
+            </div>
+            <span>More</span>
+        </div>
+    </div>
+    {% else %}
+    <div class="message">
+        <p>Run: <code>python manage.py sync_github</code></p>
+    </div>
+    {% endif %}
+
+    <div class="card-grid">
+        {% for project in projects %}
+        <div class="card">
+            <h3><a href="{% url 'project_detail' slug=project.slug %}">{{ project.title }}</a></h3>
+            <p class="card-meta">{{ project.tagline }}</p>
+            <div class="tags">
+                {% for tech in project.get_stack_list %}
+                <span class="tag">{{ tech }}</span>
+                {% endfor %}
+            </div>
+            {% if project.demo_url %}
+            <div class="mt-1">
+                <a href="{{ project.demo_url }}" target="_blank" rel="noopener" class="btn btn-secondary">View Demo</a>
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="message">
+            <p>No projects found. Add projects via Django admin.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

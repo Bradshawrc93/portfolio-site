@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.title }} | Cody Bradshaw{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="project-header">
+        <h1>{{ project.title }}</h1>
+        <p class="card-meta">{{ project.tagline }}</p>
+        <div class="tags">
+            {% for tech in project.get_stack_list %}
+            <span class="tag">{{ tech }}</span>
+            {% endfor %}
+        </div>
+        <div class="project-meta">
+            {% if project.demo_url %}
+            <a href="{{ project.demo_url }}" target="_blank" rel="noopener" class="btn">View Demo</a>
+            {% endif %}
+            <a href="https://github.com/{{ project.repo_full_name }}" target="_blank" rel="noopener" class="btn btn-secondary">View on GitHub</a>
+        </div>
+    </div>
+
+    {% if snapshot %}
+    <div class="project-stats">
+        <div class="stat">
+            <div class="stat-value">{{ snapshot.stars }}</div>
+            <div class="stat-label">Stars</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">{{ snapshot.forks }}</div>
+            <div class="stat-label">Forks</div>
+        </div>
+        {% if snapshot.language %}
+        <div class="stat">
+            <div class="stat-value">{{ snapshot.language }}</div>
+            <div class="stat-label">Language</div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if has_activity_data %}
+    <div class="activity-chart">
+        <h2 class="activity-chart-title">Repository Activity (Last 90 Days)</h2>
+        <div class="chart-container">
+            {% for item in activity_data %}
+            <div class="chart-bar" 
+                 style="height: {% widthratio item.commits max_commits 100 %}%;"
+                 data-count="{{ item.commits }} commits"
+                 title="{{ item.day|date:'M d, Y' }}: {{ item.commits }} commits">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="message">
+        <p>Run: <code>python manage.py sync_github</code></p>
+    </div>
+    {% endif %}
+
+    {% if snapshot and snapshot.description %}
+    <section class="section">
+        <h2 class="section-title">About</h2>
+        <p>{{ snapshot.description }}</p>
+    </section>
+    {% endif %}
+
+    {% if related_posts %}
+    <section class="section">
+        <h2 class="section-title">Related Devlog Posts</h2>
+        <ul class="devlog-list">
+            {% for post in related_posts %}
+            <li class="devlog-item">
+                <h3><a href="{% url 'devlog_detail' slug=post.slug %}">{{ post.title }}</a></h3>
+                <div class="devlog-meta">
+                    {% if post.published_at %}
+                    {{ post.published_at|date:"F d, Y" }}
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+

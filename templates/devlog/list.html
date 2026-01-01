@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Insights & Learning | Cody Bradshaw{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="max-width: 800px; margin: 0 auto 3rem; text-align: center;">
+        <h1>Technical Insights</h1>
+        <p class="mb-2" style="color: var(--gray); font-size: 1.125rem; margin-top: 1rem;">Documenting the journey from operations leadership to technical depth. Real implementations, lessons learned, and strategic perspectives on AI and modern software development.</p>
+    </div>
+
+    {% if posts %}
+    <ul class="devlog-list">
+        {% for post in posts %}
+        <li class="devlog-item">
+            <h2><a href="{% url 'devlog_detail' slug=post.slug %}">{{ post.title }}</a></h2>
+            <div class="devlog-meta">
+                {% if post.published_at %}
+                {{ post.published_at|date:"F d, Y" }}
+                {% endif %}
+                {% if post.project %}
+                · <a href="{% url 'project_detail' slug=post.project.slug %}">{{ post.project.title }}</a>
+                {% endif %}
+            </div>
+            {% if post.get_tags_list %}
+            <div class="tags">
+                {% for tag in post.get_tags_list %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="message">
+        <p>No devlog posts yet. Check back soon!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

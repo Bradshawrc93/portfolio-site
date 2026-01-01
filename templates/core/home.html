@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Cody Bradshaw | Tech-Forward Operations Leader{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Top Section: Headshot + Heatmap -->
+    <div class="profile-heatmap-section">
+        <div class="profile-photo-column">
+            <div class="headshot-placeholder">
+                <div class="headshot-icon">CB</div>
+            </div>
+        </div>
+        <div class="heatmap-column">
+            {% if has_heatmap_data %}
+            <div class="heatmap-container">
+                <h2 class="heatmap-title">GitHub Contributions {{ year }}</h2>
+                <div class="heatmap-grid">
+                    {% for day, count in heatmap_data %}
+                    <div class="heatmap-cell" 
+                         style="background-color: {% if count > 0 %}rgba(0, 255, 136, {% widthratio count max_count 1 %}){% else %}var(--navy-lighter){% endif %};"
+                         title="{{ day|date:'M d, Y' }}: {{ count }} contributions">
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="heatmap-legend">
+                    <span>Less</span>
+                    <div class="heatmap-legend-cells">
+                        <div class="heatmap-legend-cell" style="background-color: var(--navy-lighter);"></div>
+                        <div class="heatmap-legend-cell" style="background-color: rgba(0, 255, 136, 0.25);"></div>
+                        <div class="heatmap-legend-cell" style="background-color: rgba(0, 255, 136, 0.5);"></div>
+                        <div class="heatmap-legend-cell" style="background-color: rgba(0, 255, 136, 0.75);"></div>
+                        <div class="heatmap-legend-cell" style="background-color: var(--mint);"></div>
+                    </div>
+                    <span>More</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="message">
+                <p>Run: <code>python manage.py sync_github</code></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Summary Section -->
+    <section class="summary-section">
+        <h2 class="section-title">About</h2>
+        <div class="summary-content">
+            <p>Operations leader with a track record of scaling support, engineering, and product teams. Building technical depth to drive AI initiatives from concept to production. Exploring the intersection of strategy, execution, and emerging technology.</p>
+            <p><strong>Objective:</strong> Transition into AI-focused roles that leverage operational expertise with growing technical capability—product management, program management, or tech-forward operations in the AI space.</p>
+        </div>
+    </section>
+
+    <!-- Latest Activity (Scrollable) -->
+    {% if latest_activity %}
+    <section class="activity-section">
+        <h2 class="section-title">Latest Activity</h2>
+        <div class="activity-scroll-container">
+            <ul class="activity-list">
+                {% for item in latest_activity %}
+                <li class="activity-item">
+                    <div class="activity-type">{{ item.type }}</div>
+                    <div class="activity-content">
+                        <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                        <div class="activity-meta">{{ item.date }}</div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Projects Grid -->
+    {% if featured_projects %}
+    <section class="projects-section">
+        <h2 class="section-title">Projects</h2>
+        <div class="project-cards-grid">
+            {% for project in featured_projects %}
+            <div class="project-card-expandable">
+                <div class="project-card-front">
+                    <h3>{{ project.title }}</h3>
+                    <p class="project-tagline">{{ project.tagline }}</p>
+                </div>
+                <div class="project-card-back">
+                    <h3>{{ project.title }}</h3>
+                    <p class="project-tagline">{{ project.tagline }}</p>
+                    <div class="project-stack">
+                        {% for tech in project.get_stack_list %}
+                        <span class="tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="project-actions">
+                        <a href="{% url 'project_detail' slug=project.slug %}" class="btn btn-small">View Details</a>
+                        {% if project.demo_url %}
+                        <a href="{{ project.demo_url }}" target="_blank" rel="noopener" class="btn btn-small btn-secondary">Live Demo</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
