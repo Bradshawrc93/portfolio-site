@@ -12,7 +12,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-change-in-production')
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# ALLOWED_HOSTS
+ALLOWED_HOSTS = []
+if 'ALLOWED_HOSTS' in os.environ:
+    ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS').split(',')]
+else:
+    # Default for local development
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    # Automatically add Render domain if RENDER_EXTERNAL_HOSTNAME is set
+    render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    if render_host:
+        ALLOWED_HOSTS.append(render_host)
+
 ADMIN_PATH = os.environ.get('ADMIN_PATH', 'admin/')
 
 # Application definition
