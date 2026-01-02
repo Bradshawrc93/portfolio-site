@@ -465,7 +465,7 @@ a:hover {
 .project-card-front h3,
 .project-card-back h3 {
     color: var(--text-primary);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-size: 20px;
 }
 
@@ -473,14 +473,14 @@ a:hover {
     color: var(--text-secondary);
     font-size: 15px;
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .project-stack {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 16px 0 8px 0;
+    margin: 0 0 16px 0;
 }
 
 .tag {
@@ -498,7 +498,7 @@ a:hover {
     display: flex;
     gap: 12px;
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 12px;
 }
 
 /* Buttons */
