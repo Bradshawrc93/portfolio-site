@@ -424,7 +424,7 @@ a:hover {
     transition: all 0.4s ease;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 20px;
 }
 
 .project-card-expandable:hover .project-card-back {
@@ -468,6 +468,7 @@ a:hover {
     display: flex;
     gap: 12px;
     margin-top: auto;
+    padding-top: 16px;
 }
 
 /* Buttons */
