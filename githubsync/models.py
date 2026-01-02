@@ -5,7 +5,7 @@ class RepoSnapshot(models.Model):
     """Cache GitHub repository metadata."""
     repo_full_name = models.CharField(max_length=200, unique=True, db_index=True)
     description = models.TextField(blank=True)
-    language = models.CharField(max_length=100, blank=True)
+    language = models.CharField(max_length=100, blank=True, null=True)
     stars = models.IntegerField(default=0)
     forks = models.IntegerField(default=0)
     open_issues = models.IntegerField(default=0)

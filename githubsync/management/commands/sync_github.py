@@ -77,11 +77,12 @@ class Command(BaseCommand):
                     pass
                 
                 # Update or create RepoSnapshot
+                language = repo_data.get('language') or None  # Convert empty string to None
                 snapshot, created = RepoSnapshot.objects.update_or_create(
                     repo_full_name=project.repo_full_name,
                     defaults={
                         'description': repo_data.get('description', '') or '',
-                        'language': repo_data.get('language', ''),
+                        'language': language,
                         'stars': repo_data.get('stargazers_count', 0),
                         'forks': repo_data.get('forks_count', 0),
                         'open_issues': repo_data.get('open_issues_count', 0),
