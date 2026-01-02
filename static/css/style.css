@@ -216,6 +216,12 @@ a:hover {
     border-radius: 3px;
     transition: all 0.2s ease;
     cursor: pointer;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.heatmap-cell-future {
+    border-color: rgba(255, 255, 255, 0.02);
 }
 
 .heatmap-cell:hover {
@@ -223,7 +229,24 @@ a:hover {
     outline-offset: 2px;
     transform: scale(1.2);
     z-index: 10;
-    position: relative;
+}
+
+.heatmap-cell:hover::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    z-index: 20;
 }
 
 .heatmap-legend {
@@ -292,7 +315,7 @@ a:hover {
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 24px;
-    max-height: 420px;
+    max-height: 320px;
     overflow-y: auto;
 }
 
@@ -364,6 +387,13 @@ a:hover {
 
 .activity-content h3 a:hover {
     color: var(--accent);
+}
+
+.activity-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 8px 0 4px 0;
+    line-height: 1.5;
 }
 
 .activity-meta {
@@ -450,7 +480,7 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 24px 0;
+    margin: 16px 0 8px 0;
 }
 
 .tag {
@@ -468,7 +498,7 @@ a:hover {
     display: flex;
     gap: 12px;
     margin-top: auto;
-    padding-top: 16px;
+    padding-top: 20px;
 }
 
 /* Buttons */
@@ -546,13 +576,60 @@ a:hover {
 }
 
 /* Activity Chart */
-.activity-chart {
+.activity-chart,
+.activity-line-chart {
     background: var(--bg-card);
     backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 32px;
     margin: 32px 0;
+}
+
+.line-chart-container {
+    position: relative;
+    height: 240px;
+    padding: 20px 0 40px 0;
+}
+
+.line-chart {
+    width: 100%;
+    height: 200px;
+    display: block;
+}
+
+.line-chart-area {
+    stroke: none;
+}
+
+.line-chart-line {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.line-chart-point {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.line-chart-point:hover {
+    r: 5;
+    filter: brightness(1.2);
+}
+
+.line-chart-x-axis {
+    position: relative;
+    height: 40px;
+    border-top: 1px solid var(--border-color);
+    margin-top: -20px;
+}
+
+.x-axis-label {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    top: 8px;
 }
 
 .activity-chart-title {

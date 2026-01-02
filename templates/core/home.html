@@ -16,10 +16,10 @@
             <div class="heatmap-container">
                 <h2 class="heatmap-title">GitHub Contributions {{ year }}</h2>
                 <div class="heatmap-grid">
-                    {% for day, count in heatmap_data %}
-                    <div class="heatmap-cell" 
-                         style="background-color: {% if count > 0 %}rgba(0, 255, 136, {% widthratio count max_count 1 %}){% else %}var(--navy-lighter){% endif %};"
-                         title="{{ day|date:'M d, Y' }}: {{ count }} contributions">
+                    {% for day, count, is_future in heatmap_data %}
+                    <div class="heatmap-cell {% if is_future %}heatmap-cell-future{% endif %}" 
+                         style="background-color: {% if count > 0 %}rgba(0, 255, 136, {% widthratio count max_count 1 %}){% elif is_future %}rgba(255, 255, 255, 0.03){% else %}rgba(255, 255, 255, 0.05){% endif %};"
+                         title="{{ day|date:'M d, Y' }}: {{ count }} contribution{{ count|pluralize }}">
                     </div>
                     {% endfor %}
                 </div>
@@ -63,6 +63,9 @@
                     <div class="activity-type">{{ item.type }}</div>
                     <div class="activity-content">
                         <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
+                        {% if item.description %}
+                        <div class="activity-description">{{ item.description }}</div>
+                        {% endif %}
                         <div class="activity-meta">{{ item.date }}</div>
                     </div>
                 </li>

@@ -17,8 +17,21 @@ def home(request):
         published_at__isnull=False
     ).order_by('-published_at')[:10]
     
-    # Combine into activity feed (devlog posts as activity items)
+    # Combine into activity feed (devlog posts + projects)
     latest_activity = []
+    
+    # Add latest projects
+    latest_projects = Project.objects.filter(status='active').order_by('-created_at')[:5]
+    for project in latest_projects:
+        latest_activity.append({
+            'type': 'Project',
+            'title': project.title,
+            'url': project.get_absolute_url(),
+            'date': project.created_at.strftime('%b %d, %Y'),
+            'description': project.tagline,
+        })
+    
+    # Add latest devlog posts
     for post in latest_devlog:
         latest_activity.append({
             'type': 'Devlog',
@@ -26,6 +39,10 @@ def home(request):
             'url': post.get_absolute_url(),
             'date': post.published_at.strftime('%b %d, %Y') if post.published_at else '',
         })
+    
+    # Sort by date (most recent first) and limit to 10 items
+    latest_activity.sort(key=lambda x: x['date'], reverse=True)
+    latest_activity = latest_activity[:10]
     
     # Get heatmap data
     username = 'bradshawrc93'
@@ -44,10 +61,12 @@ def home(request):
     contribution_counts = [c.count for c in contribution_days] if contribution_days else [0]
     max_count = max(contribution_counts) if contribution_counts else 1
     
+    today = timezone.now().date()
     current_date = year_start
     while current_date <= year_end:
         count = heatmap_dict.get(current_date, 0)
-        heatmap_data.append((current_date, count))
+        is_future = current_date > today
+        heatmap_data.append((current_date, count, is_future))
         current_date += timedelta(days=1)
     
     context = {
@@ -84,10 +103,12 @@ def project_list(request):
     contribution_counts = [c.count for c in contribution_days] if contribution_days else [0]
     max_count = max(contribution_counts) if contribution_counts else 1
     
+    today = timezone.now().date()
     current_date = year_start
     while current_date <= year_end:
         count = heatmap_dict.get(current_date, 0)
-        heatmap_data.append((current_date, count))
+        is_future = current_date > today
+        heatmap_data.append((current_date, count, is_future))
         current_date += timedelta(days=1)
     
     context = {
