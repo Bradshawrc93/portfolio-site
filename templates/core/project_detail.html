@@ -20,9 +20,9 @@
         </div>
     </div>
 
-    {% if has_activity_data %}
     <div class="activity-line-chart">
         <h2 class="activity-chart-title">Repository Activity (Last 90 Days)</h2>
+        {% if has_activity_data %}
         <div class="line-chart-wrapper">
             <div class="line-chart-container">
                 {% for item in activity_data %}
@@ -41,8 +41,12 @@
                 {% endfor %}
             </div>
         </div>
+        {% else %}
+        <div class="message">
+            <p>No commit activity data available. Run: <code>python manage.py sync_github</code> to fetch repository activity.</p>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
 
     {% if snapshot and snapshot.readme_content %}
     <section class="section readme-section">
