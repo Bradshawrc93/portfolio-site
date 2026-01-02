@@ -12,6 +12,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 import requests
 import os
+import base64
 from core.models import Project
 from githubsync.models import RepoSnapshot, RepoActivityPoint, UserContributionDay
 
@@ -62,6 +63,19 @@ class Command(BaseCommand):
                     except (ValueError, AttributeError):
                         pass
                 
+                # Fetch README content
+                readme_content = ''
+                try:
+                    readme_url = f'{base_url}/repos/{project.repo_full_name}/readme'
+                    readme_response = requests.get(readme_url, headers=headers, timeout=10)
+                    if readme_response.status_code == 200:
+                        readme_data = readme_response.json()
+                        # Decode base64 content
+                        readme_content = base64.b64decode(readme_data.get('content', '')).decode('utf-8')
+                except (requests.exceptions.RequestException, ValueError, KeyError):
+                    # README might not exist or might not be accessible
+                    pass
+                
                 # Update or create RepoSnapshot
                 snapshot, created = RepoSnapshot.objects.update_or_create(
                     repo_full_name=project.repo_full_name,
@@ -72,6 +86,7 @@ class Command(BaseCommand):
                         'forks': repo_data.get('forks_count', 0),
                         'open_issues': repo_data.get('open_issues_count', 0),
                         'pushed_at': pushed_at,
+                        'readme_content': readme_content,
                     }
                 )
                 

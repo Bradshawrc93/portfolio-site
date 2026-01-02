@@ -20,6 +20,25 @@
         </div>
     </div>
 
+    {% if has_activity_data %}
+    <div class="activity-chart">
+        <h2 class="activity-chart-title">Repository Activity (Last 90 Days)</h2>
+        <div class="chart-container">
+            {% for item in activity_data %}
+            <div class="chart-bar" 
+                 style="height: {% widthratio item.commits max_commits 100 %}%;"
+                 data-count="{{ item.commits }} commits"
+                 title="{{ item.day|date:'M d, Y' }}: {{ item.commits }} commits">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="message">
+        <p>Run: <code>python manage.py sync_github</code></p>
+    </div>
+    {% endif %}
+
     {% if snapshot %}
     <div class="project-stats">
         <div class="stat">
@@ -39,23 +58,13 @@
     </div>
     {% endif %}
 
-    {% if has_activity_data %}
-    <div class="activity-chart">
-        <h2 class="activity-chart-title">Repository Activity (Last 90 Days)</h2>
-        <div class="chart-container">
-            {% for item in activity_data %}
-            <div class="chart-bar" 
-                 style="height: {% widthratio item.commits max_commits 100 %}%;"
-                 data-count="{{ item.commits }} commits"
-                 title="{{ item.day|date:'M d, Y' }}: {{ item.commits }} commits">
-            </div>
-            {% endfor %}
+    {% if snapshot and snapshot.readme_content %}
+    <section class="section readme-section">
+        <h2 class="section-title">README</h2>
+        <div class="readme-content">
+            {{ readme_html|safe }}
         </div>
-    </div>
-    {% else %}
-    <div class="message">
-        <p>Run: <code>python manage.py sync_github</code></p>
-    </div>
+    </section>
     {% endif %}
 
     {% if snapshot and snapshot.description %}

@@ -10,6 +10,7 @@ class RepoSnapshot(models.Model):
     forks = models.IntegerField(default=0)
     open_issues = models.IntegerField(default=0)
     pushed_at = models.DateTimeField(null=True, blank=True)
+    readme_content = models.TextField(blank=True, help_text="README.md content from repository")
     updated_at = models.DateTimeField(auto_now=True)
     fetched_at = models.DateTimeField(auto_now_add=True)
 

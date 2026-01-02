@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+from markdown import markdown
 from .models import Project
 from devlog.models import DevlogPost
 from githubsync.models import RepoSnapshot, RepoActivityPoint, UserContributionDay
@@ -136,6 +137,14 @@ def project_detail(request, slug):
         published_at__isnull=False
     )[:5]
     
+    # Render README as HTML if it exists
+    readme_html = ''
+    if snapshot and snapshot.readme_content:
+        readme_html = markdown(
+            snapshot.readme_content,
+            extensions=['fenced_code', 'codehilite', 'tables', 'toc']
+        )
+    
     context = {
         'project': project,
         'snapshot': snapshot,
@@ -143,6 +152,7 @@ def project_detail(request, slug):
         'max_commits': max_commits,
         'has_activity_data': len(activity_data) > 0,
         'related_posts': related_posts,
+        'readme_html': readme_html,
     }
     return render(request, 'core/project_detail.html', context)
 
