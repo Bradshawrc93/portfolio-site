@@ -586,42 +586,67 @@ a:hover {
     margin: 32px 0;
 }
 
-.line-chart-container {
+.line-chart-wrapper {
     position: relative;
-    height: 240px;
-    padding: 20px 0 40px 0;
 }
 
-.line-chart {
-    width: 100%;
+.line-chart-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
     height: 200px;
-    display: block;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
 }
 
-.line-chart-area {
-    stroke: none;
+.line-chart-bar {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    min-width: 2px;
 }
 
-.line-chart-line {
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.line-chart-point {
+.line-chart-bar-fill {
+    width: 100%;
+    background: linear-gradient(to top, var(--accent), var(--accent-hover));
+    border-radius: 2px 2px 0 0;
+    min-height: 2px;
     transition: all 0.2s ease;
     cursor: pointer;
+    position: relative;
 }
 
-.line-chart-point:hover {
-    r: 5;
+.line-chart-bar:hover .line-chart-bar-fill {
     filter: brightness(1.2);
+    box-shadow: 0 -2px 8px rgba(0, 255, 136, 0.3);
+}
+
+.line-chart-bar:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    z-index: 20;
+    pointer-events: none;
 }
 
 .line-chart-x-axis {
     position: relative;
     height: 40px;
-    border-top: 1px solid var(--border-color);
-    margin-top: -20px;
+    margin-top: 8px;
 }
 
 .x-axis-label {

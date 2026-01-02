@@ -23,43 +23,20 @@
     {% if has_activity_data %}
     <div class="activity-line-chart">
         <h2 class="activity-chart-title">Repository Activity (Last 90 Days)</h2>
-        <div class="line-chart-container">
-            <svg class="line-chart" viewBox="0 0 800 200" preserveAspectRatio="none">
-                <defs>
-                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:var(--accent);stop-opacity:0.3" />
-                        <stop offset="100%" style="stop-color:var(--accent);stop-opacity:0" />
-                    </linearGradient>
-                </defs>
-                <polyline
-                    class="line-chart-area"
-                    fill="url(#lineGradient)"
-                    points="{% for item in activity_data %}{% widthratio forloop.counter0|add:1 activity_data|length 800 %},{% widthratio item.commits max_commits 180 %}{% if not forloop.last %} {% endif %}{% endfor %}">
-                </polyline>
-                <polyline
-                    class="line-chart-line"
-                    fill="none"
-                    stroke="var(--accent)"
-                    stroke-width="2"
-                    points="{% for item in activity_data %}{% widthratio forloop.counter0|add:1 activity_data|length 800 %},{% widthratio item.commits max_commits 180 %}{% if not forloop.last %} {% endif %}{% endfor %}">
-                </polyline>
+        <div class="line-chart-wrapper">
+            <div class="line-chart-container">
                 {% for item in activity_data %}
-                <circle
-                    class="line-chart-point"
-                    cx="{% widthratio forloop.counter0|add:1 activity_data|length 800 %}"
-                    cy="{% widthratio item.commits max_commits 180 %}"
-                    r="3"
-                    fill="var(--accent)"
-                    data-date="{{ item.day|date:'M d, Y' }}"
-                    data-count="{{ item.commits }}"
-                    title="{{ item.day|date:'M d, Y' }}: {{ item.commits }} commits">
-                </circle>
+                <div class="line-chart-bar" 
+                     style="height: {% widthratio item.commits max_commits 100 %}%;"
+                     title="{{ item.day|date:'M d, Y' }}: {{ item.commits }} commit{{ item.commits|pluralize }}">
+                    <div class="line-chart-bar-fill"></div>
+                </div>
                 {% endfor %}
-            </svg>
+            </div>
             <div class="line-chart-x-axis">
                 {% for item in activity_data %}
                     {% if forloop.counter0|divisibleby:15 or forloop.last %}
-                    <span class="x-axis-label" style="left: {% widthratio forloop.counter0|add:1 activity_data|length 100 %}%;">{{ item.day|date:"M d" }}</span>
+                    <span class="x-axis-label" style="left: {% widthratio forloop.counter0 activity_data|length|add:-1 100 %}%;">{{ item.day|date:"M d" }}</span>
                     {% endif %}
                 {% endfor %}
             </div>
